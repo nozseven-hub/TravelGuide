@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+  <title>Lyon Travel Guide — Great App (with Routes)</title>
+
+  <!-- Leaflet & Awesome Markers & Font Awesome -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" data-tab="mapTab">Map</div>
+    <div class="tab" data-tab="planTab">Plan</div>
+  </div>
+
+  <!-- MAP TAB -->
+  <div id="mapTab" class="tab-content active">
+    <div id="map">
+      <button id="filtersToggle" class="toggle-btn">⚙️ Filters</button>
+      <button id="legendToggle" class="toggle-btn">📖 Legend</button>
+
+      <div id="filtersPanel" class="panel filters-panel">
+        <label>Plan</label>
+        <select id="planSelect">
+          <option value="A">Plan A (Lyon + Beaujolais)</option>
+          <option value="B">Plan B (Lyon only)</option>
+        </select>
+        <label>Day</label>
+        <select id="daySelect">
+          <option value="all">All Days</option>
+          <option value="day1">Day 1</option>
+          <option value="day2">Day 2</option>
+          <option value="day3">Day 3</option>
+          <option value="day4">Day 4</option>
+          <option value="day5">Day 5</option>
+        </select>
+        <label>Category</label>
+        <select id="catSelect">
+          <option value="all">All Categories</option>
+          <option value="sight">Sights</option>
+          <option value="museum">Museums</option>
+          <option value="church">Churches</option>
+          <option value="market">Markets</option>
+          <option value="restaurant">Restaurants</option>
+          <option value="wine">Wine/Wineries</option>
+          <option value="home">Home</option>
+        </select>
+        <button id="clearFilters">Clear All Filters</button>
+      </div>
+
+      <div id="legendPanel" class="panel legend-panel">
+        <div class="legend-title">Legend</div>
+        <div class="legend-section">
+          <div><span class="dot" style="background:#d9534f"></span> Day 1</div>
+          <div><span class="dot" style="background:#0275d8"></span> Day 2</div>
+          <div><span class="dot" style="background:#5cb85c"></span> Day 3</div>
+          <div><span class="dot" style="background:#f0ad4e"></span> Day 4</div>
+          <div><span class="dot" style="background:#613d7c"></span> Day 5</div>
+        </div>
+        <div>
+          🍽️ Restaurant<br/> 🛍️ Market<br/> 🖼️ Museum<br/> ⛪ Church<br/> 🗺️ Sights<br/> 🍷 Wine<br/> 🏠 Home
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAN TAB -->
+  <div id="planTab" class="tab-content">
+    <div id="plan">
+      <h3>Trip Plan</h3>
+      <div id="planDetails"></div>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
