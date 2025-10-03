@@ -11,7 +11,7 @@ function P(lat, lng, name, cat, opts = {}) {
   return Object.assign({ lat, lng, name, cat }, opts);
 }
 
-/* ===================== POIs ===================== */
+/* ====================== POIs ====================== */
 const POI = {
   // --- Sights & areas ---
   vieuxLyon: P(45.7629,4.8270,"Vieux Lyon (Old Town)","sight",{dur:"1.5–2h",notes:"Renaissance alleys & traboules"}),
