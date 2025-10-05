@@ -1,3 +1,93 @@
+/* ===== Mobile UX Enhancements ===== */
+@media (max-width: 600px) {
+  body {
+    padding: 0;
+    margin: 0;
+    font-size: 17px;
+    background: #fafbfc;
+  }
+  .tabs {
+    flex-direction: column;
+    font-size: 18px;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .tab {
+    padding: 18px 0;
+    font-size: 19px;
+    min-width: 100vw;
+    border-bottom: 1px solid #eee;
+    border-radius: 0;
+    touch-action: manipulation;
+  }
+  .tab.active {
+    background: #333;
+    color: #fff;
+  }
+  #map {
+    height: 55vh;
+    min-height: 180px;
+    border-radius: 0;
+  }
+  .panel {
+    width: 98vw;
+    left: 1vw;
+    right: 1vw;
+    border-radius: 16px;
+    font-size: 17px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  }
+  .toggle-btn {
+    font-size: 22px;
+    padding: 16px 22px;
+    right: 12px;
+    border-radius: 999px;
+    top: 12px;
+    bottom: auto;
+    z-index: 1200;
+  }
+  .filters-panel label {
+    font-size: 17px;
+    margin-top: 10px;
+  }
+  select, button {
+    font-size: 18px;
+    min-height: 48px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .legend-title {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+  .legend-section-title {
+    font-size: 19px;
+    margin-top: 12px;
+    margin-bottom: 8px;
+  }
+  .day-title {
+    font-size: 18px;
+  }
+  .poi {
+    font-size: 17px;
+    padding: 12px 0;
+  }
+  .custom-emoji-marker {
+    width: 40px;
+    height: 40px;
+    font-size: 2.2em;
+  }
+  .dot {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+  }
+}
 html, body {
   height: 100%;
   margin: 0;
@@ -29,9 +119,79 @@ html, body {
 }
 
 /* ===== Map ===== */
+/* Custom emoji marker for map pins */
+/* Smaller category icons for legend */
+.custom-emoji-marker {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #444;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  vertical-align: middle;
+}
+.custom-emoji-marker span {
+  font-size: 1.4em;
+  line-height: 1;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.18));
+}
 #map {
   height: 80vh;
   position: relative;
+  min-height: 320px;
+}
+
+@media (max-width: 600px) {
+  html, body {
+    font-size: 16px;
+  }
+  .tabs {
+    font-size: 18px;
+    flex-direction: column;
+  }
+  .tab {
+    padding: 16px;
+    font-size: 18px;
+  }
+  #map {
+    height: 60vh;
+    min-height: 220px;
+  }
+  .panel {
+    width: 98vw;
+    left: 1vw;
+    right: 1vw;
+    border-radius: 16px;
+    font-size: 17px;
+  }
+  .toggle-btn {
+    font-size: 20px;
+    padding: 14px 18px;
+    right: 16px;
+    border-radius: 999px;
+  }
+  .filters-panel label {
+    font-size: 16px;
+  }
+  select, button {
+    font-size: 17px;
+    min-height: 44px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+  }
+  .legend-title {
+    font-size: 20px;
+  }
+  .day-title {
+    font-size: 18px;
+  }
+  .poi {
+    font-size: 16px;
+    padding: 10px 0;
+  }
 }
 
 /* Toggles */
@@ -102,6 +262,7 @@ html, body {
 .legend-title {
   font-weight: 700;
   margin-bottom: 6px;
+  text-decoration: underline;
 }
 .dot {
   display: inline-block;

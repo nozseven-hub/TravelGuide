@@ -6,68 +6,46 @@
   <title>Lyon Travel Guide — Great App (with Routes)</title>
 
   <!-- Leaflet & Awesome Markers & Font Awesome -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.awesome-markers@2.0.5/dist/leaflet.awesome-markers.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
-  <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.awesome-markers@2.0.5/dist/leaflet.awesome-markers.js"></script>
 
   <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
   <!-- Tabs -->
-  <div class="tabs">
-    <div class="tab active" data-tab="mapTab">Map</div>
-    <div class="tab" data-tab="planTab">Plan</div>
+  <div class="tabs" role="tablist">
+    <div class="tab active" data-tab="mapTab" role="tab" aria-selected="true" tabindex="0">Map</div>
+    <div class="tab" data-tab="planTab" role="tab" aria-selected="false" tabindex="0">Plan</div>
   </div>
 
   <!-- MAP TAB -->
   <div id="mapTab" class="tab-content active">
     <div id="map">
-      <button id="filtersToggle" class="toggle-btn">⚙️ Filters</button>
-      <button id="legendToggle" class="toggle-btn">📖 Legend</button>
+      <button id="filtersToggle" class="toggle-btn" aria-label="Show filters" tabindex="0">⚙️ Filters</button>
+      <button id="legendToggle" class="toggle-btn" aria-label="Show legend" tabindex="0">📖 Legend</button>
 
-      <div id="filtersPanel" class="panel filters-panel">
-        <label>Plan</label>
-        <select id="planSelect">
-          <option value="A">Plan A (Lyon + Beaujolais)</option>
-          <option value="B">Plan B (Lyon only)</option>
+      <div id="filtersPanel" class="panel filters-panel" aria-label="Filters Panel">
+        <label for="planSelect">Plan</label>
+        <select id="planSelect" aria-label="Select Plan">
+          <!-- Options will be populated dynamically using planTitles and numeric keys -->
         </select>
-        <label>Day</label>
-        <select id="daySelect">
-          <option value="all">All Days</option>
-          <option value="day1">Day 1</option>
-          <option value="day2">Day 2</option>
-          <option value="day3">Day 3</option>
-          <option value="day4">Day 4</option>
-          <option value="day5">Day 5</option>
+        <label for="daySelect">Day</label>
+        <select id="daySelect" aria-label="Select Day">
+          <!-- Options will be populated dynamically using actual day names from the selected plan -->
         </select>
-        <label>Category</label>
-        <select id="catSelect">
-          <option value="all">All Categories</option>
-          <option value="sight">Sights</option>
-          <option value="museum">Museums</option>
-          <option value="church">Churches</option>
-          <option value="market">Markets</option>
-          <option value="restaurant">Restaurants</option>
-          <option value="wine">Wine/Wineries</option>
-          <option value="home">Home</option>
+        <label for="catSelect">Category</label>
+        <select id="catSelect" aria-label="Select Category">
+          <!-- Options will be populated dynamically -->
         </select>
-        <button id="clearFilters">Clear All Filters</button>
+        <button id="clearFilters" aria-label="Clear All Filters" tabindex="0">Clear All Filters</button>
       </div>
 
-      <div id="legendPanel" class="panel legend-panel">
+      <div id="legendPanel" class="panel legend-panel" aria-label="Legend Panel">
         <div class="legend-title">Legend</div>
-        <div class="legend-section">
-          <div><span class="dot" style="background:#d9534f"></span> Day 1</div>
-          <div><span class="dot" style="background:#0275d8"></span> Day 2</div>
-          <div><span class="dot" style="background:#5cb85c"></span> Day 3</div>
-          <div><span class="dot" style="background:#f0ad4e"></span> Day 4</div>
-          <div><span class="dot" style="background:#613d7c"></span> Day 5</div>
-        </div>
-        <div>
-          🍽️ Restaurant<br/> 🛍️ Market<br/> 🖼️ Museum<br/> ⛪ Church<br/> 🗺️ Sights<br/> 🍷 Wine<br/> 🏠 Home
-        </div>
+        <div class="legend-section"></div>
       </div>
     </div>
   </div>
