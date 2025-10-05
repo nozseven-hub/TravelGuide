@@ -24,25 +24,19 @@
   <!-- MAP TAB -->
   <div id="mapTab" class="tab-content active">
     <div id="map">
-      <button id="filtersToggle" class="toggle-btn" aria-label="Show filters" tabindex="0">⚙️ Filters</button>
-      <button id="legendToggle" class="toggle-btn" aria-label="Show legend" tabindex="0">📖 Legend</button>
-
+      <div class="toggle-tab-row">
+        <button id="filtersToggle" class="toggle-btn" aria-label="Show filters">⚙️ Filters</button>
+        <button id="legendToggle" class="toggle-btn" aria-label="Show legend">📖 Legend</button>
+      </div>
       <div id="filtersPanel" class="panel filters-panel" aria-label="Filters Panel">
         <label for="planSelect">Plan</label>
-        <select id="planSelect" aria-label="Select Plan">
-          <!-- Options will be populated dynamically using planTitles and numeric keys -->
-        </select>
+        <select id="planSelect" aria-label="Select Plan"></select>
         <label for="daySelect">Day</label>
-        <select id="daySelect" aria-label="Select Day">
-          <!-- Options will be populated dynamically using actual day names from the selected plan -->
-        </select>
+        <select id="daySelect" aria-label="Select Day"></select>
         <label for="catSelect">Category</label>
-        <select id="catSelect" aria-label="Select Category">
-          <!-- Options will be populated dynamically -->
-        </select>
-        <button id="clearFilters" aria-label="Clear All Filters" tabindex="0">Clear All Filters</button>
+        <select id="catSelect" aria-label="Select Category"></select>
+        <button id="clearFilters" aria-label="Clear All Filters">Clear All Filters</button>
       </div>
-
       <div id="legendPanel" class="panel legend-panel" aria-label="Legend Panel">
         <div class="legend-title">Legend</div>
         <div class="legend-section"></div>

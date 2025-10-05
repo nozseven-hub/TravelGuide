@@ -21,7 +21,7 @@ let routeLayer = null; // polyline
 let dotLayer = null;   // small dots at each stop
 
 // Initialize Leaflet map
-let map;
+// Correct Leaflet map initialization
 let initialLat, initialLng;
 if (typeof HOME !== 'undefined' && HOME.lat && HOME.lng) {
   initialLat = HOME.lat;
@@ -35,7 +35,10 @@ if (typeof HOME !== 'undefined' && HOME.lat && HOME.lng) {
   initialLat = firstPOI.lat;
   initialLng = firstPOI.lng;
 }
-map = L.map('map').setView([initialLat, initialLng], 13);
+let map = L.map('map').setView([initialLat, initialLng], 13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; OpenStreetMap contributors'
+}).addTo(map);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
@@ -75,17 +78,24 @@ document.querySelectorAll(".tab").forEach(tab => {
 document.getElementById("legendToggle").onclick = function() {
   const legendPanel = document.getElementById("legendPanel");
   const filtersPanel = document.getElementById("filtersPanel");
-  filtersPanel.classList.remove("open");
-  legendPanel.classList.add("open");
-  renderLegend();
+  if (legendPanel.classList.contains("open")) {
+    legendPanel.classList.remove("open");
+  } else {
+    legendPanel.classList.add("open");
+    filtersPanel.classList.remove("open");
+    renderLegend();
+  }
 };
 
-// Filters toggle button: open filters, close legend
 document.getElementById("filtersToggle").onclick = function() {
   const legendPanel = document.getElementById("legendPanel");
   const filtersPanel = document.getElementById("filtersPanel");
-  legendPanel.classList.remove("open");
-  filtersPanel.classList.add("open");
+  if (filtersPanel.classList.contains("open")) {
+    filtersPanel.classList.remove("open");
+  } else {
+    filtersPanel.classList.add("open");
+    legendPanel.classList.remove("open");
+  }
 };
 function renderLegend() {
   // Declare all variables once at the top
@@ -125,7 +135,7 @@ function renderLegend() {
         if (currentDay !== "all" && currentDay !== dayKey) return;
         plan[dayKey].forEach(poi => {
           if (currentCat === "other") {
-            if (osmTags.includes(poi.cat)) return;
+            if (Object.keys(CONFIG.osmTagIcons).includes(poi.cat)) return;
           } else if (currentCat !== "all" && currentCat !== poi.cat) {
             return;
           }
@@ -140,7 +150,7 @@ function renderLegend() {
       if (currentDay !== "all" && currentDay !== dayKey) return;
       plan[dayKey].forEach(poi => {
         if (currentCat === "other") {
-          if (osmTags.includes(poi.cat)) return;
+          if (Object.keys(CONFIG.osmTagIcons).includes(poi.cat)) return;
         } else if (currentCat !== "all" && currentCat !== poi.cat) {
           return;
         }
@@ -182,7 +192,8 @@ const osmTags = [
 
 function getIcon(cat, day) {
   // Use OSM tag emoji mapping for map markers
-  let iconEmoji = CONFIG.osmTagIcons[cat] || CONFIG.osmTagIcons.other;
+  let iconEmoji = CONFIG.osmTagIcons[cat];
+  if (!iconEmoji) iconEmoji = "❓";
   return L.divIcon({
     className: 'custom-emoji-marker',
     html: `<span>${iconEmoji}</span>`,
@@ -202,9 +213,11 @@ function navLinks(lat, lng) {
 
 function popupHTML(p, day) {
   const n = navLinks(p.lat, p.lng);
+  let catLabel = CONFIG.osmTagIcons[p.cat] ? p.cat : CONFIG.labels.otherCategory;
   return `<b>${p.name}</b>${
     day && day.startsWith("day") ? `<br>Day ${day.replace("day", "")}` : ""
   }
+          <br><span class="popup-cat">${catLabel}</span>
           ${p.dur ? `<br>⏱ ${p.dur}` : ""}
           ${p.notes ? `<br>${p.notes}` : ""}
           ${p.phone ? `<br>☎ <a href="tel:${p.phone}">${p.phone}</a>` : ""}
@@ -446,10 +459,10 @@ document.getElementById("catSelect").onchange = e => {
   refreshMap();
 };
 document.getElementById("clearFilters").onclick = () => {
-  currentPlan = 1;
+  currentPlan = "all";
   currentDay = "all";
   currentCat = "all";
-  document.getElementById("planSelect").value = 1;
+  document.getElementById("planSelect").value = "all";
   document.getElementById("daySelect").value = "all";
   document.getElementById("catSelect").value = "all";
   refreshMap();
@@ -462,14 +475,28 @@ function populateSelectors(filterDirection) {
   const planSelect = document.getElementById("planSelect");
   const daySelect = document.getElementById("daySelect");
   const catSelect = document.getElementById("catSelect");
+  // Always initialize matchFn before use
+  let matchFn = () => true;
+  if (currentCat === CONFIG.labels.otherCategory || currentCat === "other") {
+    matchFn = poi => !Object.keys(CONFIG.osmTagIcons).includes(poi.cat);
+  } else if (currentCat !== "all") {
+    matchFn = poi => poi.cat === currentCat;
+  }
   let filteredPlans = Object.keys(planTitles);
+  if (currentCat !== "all") {
+    filteredPlans = filteredPlans.filter(planKey => {
+      const plan = plans[planKey];
+      return Object.values(plan).some(dayPois => dayPois.some(matchFn));
+    });
+  }
   let filteredDays = [];
+  const catSet = new Set();
 
   // If filtering by category, restrict plans/days
   if (filterDirection === "category" && currentCat !== "all") {
     filteredPlans = filteredPlans.filter(planKey => {
       const plan = plans[planKey];
-      return Object.values(plan).some(dayPois => dayPois.some(poi => poi.cat === currentCat));
+      return Object.values(plan).some(dayPois => dayPois.some(matchFn));
     });
     // If no plans match, set to 'all' and skip day/category population
     if (filteredPlans.length === 0) {
@@ -482,7 +509,7 @@ function populateSelectors(filterDirection) {
       }
       if (plans[currentPlan]) {
         filteredDays = Object.keys(plans[currentPlan]).filter(dayKey => {
-          return plans[currentPlan][dayKey].some(poi => poi.cat === currentCat);
+          return plans[currentPlan][dayKey].some(matchFn);
         });
       } else {
         filteredDays = [];
@@ -491,6 +518,17 @@ function populateSelectors(filterDirection) {
     // If currentDay is not in filteredDays, reset to "all"
     if (currentDay !== "all" && !filteredDays.includes(currentDay)) {
       currentDay = "all";
+    }
+    // Only reset category to 'all' if there are absolutely no matching POIs for the selected plan and category
+    let hasMatchingPOI = false;
+    filteredPlans.forEach(planKey => {
+      const plan = plans[planKey];
+      Object.values(plan).forEach(dayPois => {
+        if (dayPois.some(matchFn)) hasMatchingPOI = true;
+      });
+    });
+    if (!hasMatchingPOI) {
+      currentCat = "all";
     }
   }
 
@@ -518,27 +556,29 @@ function populateSelectors(filterDirection) {
   allOpt.textContent = CONFIG.labels.allDays;
   daySelect.appendChild(allOpt);
   let planDays;
+  // Always filter days to only those with POIs matching the selected category
+  // Always define matchFn at the top before any usage
+  if (currentCat === CONFIG.labels.otherCategory || currentCat === "other") {
+    matchFn = poi => !Object.keys(CONFIG.osmTagIcons).includes(poi.cat);
+  } else if (currentCat !== "all") {
+    matchFn = poi => poi.cat === currentCat;
+  } else {
+    matchFn = () => true;
+  }
   if (currentPlan === "all") {
     const allDaysSet = new Set();
     filteredPlans.forEach(planKey => {
-      Object.keys(plans[planKey]).forEach(day => allDaysSet.add(day));
+      Object.keys(plans[planKey]).forEach(day => {
+        if (plans[planKey][day].some(matchFn)) {
+          allDaysSet.add(day);
+        }
+      });
     });
     planDays = Array.from(allDaysSet);
   } else {
-    planDays = Object.keys(plans[currentPlan]);
-  }
-  if (filterDirection === "category" && currentCat !== "all") {
-    if (currentPlan === "all") {
-      planDays = planDays.filter(day => {
-        return filteredPlans.some(planKey =>
-          plans[planKey][day] && plans[planKey][day].some(poi => poi.cat === currentCat)
-        );
-      });
-    } else {
-      planDays = planDays.filter(day => {
-        return plans[currentPlan][day].some(poi => poi.cat === currentCat);
-      });
-    }
+    planDays = Object.keys(plans[currentPlan]).filter(day => {
+      return plans[currentPlan][day].some(matchFn);
+    });
   }
   planDays.forEach(day => {
     const opt = document.createElement("option");
@@ -586,7 +626,7 @@ function populateSelectors(filterDirection) {
   let hasOther = false;
   pois.forEach(poi => {
     if (poi.cat !== "home") {
-      if (osmTags.includes(poi.cat)) {
+      if (Object.keys(CONFIG.osmTagIcons).includes(poi.cat)) {
         catCounts[poi.cat] = (catCounts[poi.cat] || 0) + 1;
       } else {
         hasOther = true;
@@ -601,14 +641,16 @@ function populateSelectors(filterDirection) {
     opt.textContent = `${label} (${catCounts[cat]})`;
     catSelect.appendChild(opt);
   });
+  // Set selector value to user's selection if it exists, else fallback to 'all'
   if (currentCat !== "all" && !catCounts[currentCat]) {
     currentCat = "all";
   }
-  catSelect.value = currentCat;
-  if (currentCat !== "all" && !catSet.has(currentCat)) {
+  if (Array.from(catSelect.options).some(opt => opt.value === currentCat)) {
+    catSelect.value = currentCat;
+  } else {
+    catSelect.value = "all";
     currentCat = "all";
   }
-  catSelect.value = currentCat;
 
 }
 
