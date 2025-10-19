@@ -113,6 +113,10 @@ const POI = {
 //test
   testplace:      P(45.7744,4.8275,"Le Ballon","xxx"),
   testplace2:     P(45.7613,4.8347,"Le Ballon","bar",{notes:"Wine bar/caviste"}),
+  villageOutlet: P(45.8081,4.9965,"The Village Outlet","shop",{website:"https://thevillageoutlet.com",dur:"half-to-full day"}),
+leSud:         P(45.7549,4.8312,"Le Sud (Paul Bocuse Brasserie)","restaurant",{website:"https://brasseries-bocuse.com/le-sud"}),
+airport:       P(45.7256,5.0811,"Lyon-Saint-Exupéry Airport","airport",{notes:"Departure"}),
+
 
   // --- Beaujolais ---
   pizay:         P(46.2030,4.7060,"Château de Pizay (Beaujolais)","bar",{website:"https://chateau-pizay.com", notes:"Wine bar/caviste"}),
@@ -125,17 +129,60 @@ const POI = {
 const planDefinitions = [
   {
     key: 1,
-    title: "Lyon + Beaujolais",
-    days: {
-      day1: ["vieuxLyon", "traboules", "cathedral", "fourviere", "terreaux", "mba", "bouchonFilles"],
-      day2: ["croixMarket", "murCanuts", "halles", "anticWine", "brasserieGeorges"],
-      day3: ["lugdunum", "gadagne", "opera", "rueRepub", "prairial"],
-      day4: ["pizay", "nugues", "jeanLoron"],
+  title: "Lyon + Beaujolais (25–30 Oct)",
+  days: {
+    // 🗓️ Oct 25 (Fri) – Start ~11:00 • Dinner 20:00 at Le Neuvième Art
+    day1: [
+      { poi: "vieuxLyon",   override: { notes: "Start ~11:00 • Explore Old Town alleys" } },
+      { poi: "traboules",   override: { notes: "Historic traboules (self-guided)" } },
+      { poi: "cathedral",   override: { notes: "Short visit before heading uphill" } },
+      { poi: "fourviere",   override: { notes: "Basilica & panoramic view" } },
+      { poi: "terreaux",    override: { notes: "Evening stroll before dinner" } },
+      { poi: "neuviemeArt", override: { notes: "Dinner reservation 20:00" } }
+    ],
+
+    // 🗓️ Oct 26 (Sat) – The Village Outlet Day (Full Day)
+    day2: [
+      { poi: "pignol",         override: { notes: "Breakfast or coffee before departure" } },
+      { poi: "villageOutlet",  override: { name: "The Village Outlet (Lyon)", notes: "Shopping & lunch • Full-day visit" } },
+      { poi: "anticWine",      override: { notes: "Optional stop for wine tasting on return to Lyon" } },
+      { poi: "brasserieBrotteaux", override: { notes: "Casual dinner near Part-Dieu area" } }
+    ],
+
+    // 🗓️ Oct 27 (Sun) – Beaujolais 09–17 • Maison Molly 20:00
+    day3: [
+      { poi: "pizay",     override: { notes: "Beaujolais wine tour 09:00–17:00" } },
+      { poi: "nugues",    override: { notes: "Continue vineyard route" } },
+      { poi: "jeanLoron", override: { notes: "Final stop • Return ~17:00" } },
+      { poi: "brasserieGeorges", override: { name: "Maison Molly", notes: "Dinner reservation 20:00" } }
+    ],
+
+    // 🗓️ Oct 28 (Mon) – Leisure Day + Le Sud 20:00
+day4: [
+  { poi: "lugdunum",        override: { notes: "Morning visit • Roman theatres & museum (~1.5–2h)" } },
+  { poi: "confluences",     override: { notes: "Musée des Confluences • modern science & culture (~2 h)" } },
+  { poi: "confluenceWalk",  override: { notes: "Waterfront walk along Saône • cafés & architecture" } },
+  { poi: "saoneQuays",      override: { notes: "Return stroll north • late-afternoon relaxation" } },
+  { poi: "leSud",           override: { name: "Le Sud (Paul Bocuse Brasserie)", notes: "Dinner reservation at 20:00 • Mediterranean menu" } }
+],
+
+    // 🗓️ Oct 29 (Tue) – Market Day & Halles visit
       day5: [
-      { poi: "teteDor", override: { notes: "Relaxing stroll" } },
-       { poi: "pignol", override: { name: "Pignol (early lunch)" } }
-     ]
-    }
+      { poi: "croixMarket", override: { notes: "Morning market visit in Croix-Rousse • local food & crafts" } },
+      { poi: "murCanuts",   override: { notes: "Famous mural nearby • quick photo stop" } },
+      { poi: "terreaux",    override: { notes: "Walk down to Hôtel de Ville area • coffee or pastry break" } },
+      { poi: "opera",       override: { notes: "Optional stop • admire architecture" } },
+      { poi: "rueRepub",    override: { notes: "Main shopping street • window shopping or souvenirs" } },
+      { poi: "halles",      override: { notes: "Halles de Lyon Paul Bocuse • Lunch or tasting session" } },
+      { poi: "merciere",    override: { notes: "Evening drink or dessert spot before heading home" } }
+    ],
+
+    // 🗓️ Oct 30 (Wed) – Last Day • End ~13:00 → Airport
+    day6: [
+      { poi: "teteDor", override: { notes: "Relaxing stroll • Finish ~13:00" } },
+      { poi: "airport", override: { notes: "Depart for flight" } }
+    ]
+  }
   },
   {
     key: 2,
